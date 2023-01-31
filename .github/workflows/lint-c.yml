@@ -17,3 +17,5 @@ jobs:
       - name: Lint
         run: ./lint-c
 
+      - name: Add summary
+        run: echo '### Test run ok!! ' >> $GITHUB_STEP_SUMMARY
