@@ -18,4 +18,5 @@ jobs:
         run: ./lint-c
 
       - name: Add summary
-        run: echo '### Test run ok!! ' >> $GITHUB_STEP_SUMMARY
+        run: ./static-analysis-signer
+        run: cat $(find -name index.html) >> $GITHUB_STEP_SUMMARY
