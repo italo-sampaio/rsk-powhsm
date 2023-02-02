@@ -17,11 +17,13 @@ jobs:
       - name: Lint
         run: ./lint-c
 
-      - name: Add summary
+      - name: Run signer static analysis
+        id: signerStaticAnalysis
         run: |
           ./static-analysis-signer
-          if [ 0 -ne $? ]
-            cat $(find -name index.html) >> $GITHUB_STEP_SUMMARY
-          else
-            echo '### Static analysis found no errors!! ' >> $GITHUB_STEP_SUMMARY
-          fi
+          echo '### Static analysis found no errors' >> $GITHUB_STEP_SUMMARY
+
+      - name: Add static analysis summary
+        run: |
+          cat $(find -name index.html) >> $GITHUB_STEP_SUMMARY
+        if: always() && steps.signerStaticAnalysis.outcome == 'failure'
