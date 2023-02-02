@@ -25,5 +25,5 @@ jobs:
 
       - name: Add static analysis summary
         run: |
-          cat $(find -name index.html) >> $GITHUB_STEP_SUMMARY
+          cat $(find -name index.html) | sed '/<head>/,/<\/head>/{/<head>/b;/<\/head>/b;d;}' >> $GITHUB_STEP_SUMMARY
         if: always() && steps.signerStaticAnalysis.outcome == 'failure'
