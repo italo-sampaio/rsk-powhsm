@@ -19,4 +19,9 @@ jobs:
 
       - name: Add summary
         run: |
-          ./static-analysis-signer && cat $(find -name index.html) >> $GITHUB_STEP_SUMMARY
+          ./static-analysis-signer
+          if [ 0 -ne $? ]
+            cat $(find -name index.html) >> $GITHUB_STEP_SUMMARY
+          else
+            echo '### Static analysis found no errors!! ' >> $GITHUB_STEP_SUMMARY
+          fi
