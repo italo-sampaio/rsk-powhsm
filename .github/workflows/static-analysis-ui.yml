@@ -1,0 +1,26 @@
+name: UI Static Analysis
+
+on: [push]
+
+jobs:
+  run-ui-static-analysis:
+    name: Run Static Analysis
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout this repo
+        uses: actions/checkout@v3
+
+      - name: Build the ledger docker image
+        run: docker/ledger/build
+
+      - name: Run ui static analysis
+        id: uiStaticAnalysis
+        run: |
+          ./static-analysis-ui
+          echo '### Static analysis found no errors' >> $GITHUB_STEP_SUMMARY
+
+      - name: Add static analysis summary
+        run: |
+          cat $(find -name index.html) | sed '/<head>/,/<\/head>/{/<head>/b;/<\/head>/b;d;}' | sed 's/<a.*<\/a>//g' >> $GITHUB_STEP_SUMMARY
+        if: always() && steps.uiStaticAnalysis.outcome == 'failure'
