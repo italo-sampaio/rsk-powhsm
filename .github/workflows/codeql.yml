@@ -1,7 +1,7 @@
 name: "CodeQL"
 
 on:
-  push:
+#  push:
     branches: [ "master", "develop-2.3", "develop-3.0" ]
   pull_request:
     branches: [ "master" ]

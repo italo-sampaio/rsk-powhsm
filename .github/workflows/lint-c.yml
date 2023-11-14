@@ -1,6 +1,6 @@
 name: Lint C code
 
-on: [push]
+#on: [push]
 
 jobs:
   run-c-linter:

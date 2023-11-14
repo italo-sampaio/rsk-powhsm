@@ -1,0 +1,10 @@
+name: Run nightly tests
+
+on:
+  push:
+
+jobs:
+  nightly-unit-tests:
+    uses: italo-sampaio/rsk-powhsm/.github/workflows/run-tests.yml@develop-2.3
+    with:
+      ref: develop-2.3
