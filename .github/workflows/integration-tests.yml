@@ -1,0 +1,68 @@
+name: Run integration tests
+
+on:
+  workflow_call:
+    inputs:
+      powhsm-ref:
+        description: 'Branch or tag name to test for rsk-powhsm repo'
+        type: string
+        required: false
+        default: 'develop-2.3'
+      hsm-integration-test-ref:
+        description: 'Branch or tag name to test for hsm-integration-test repo'
+        type: string
+        required: false
+        default: '2.3.0.plus'
+      environment:
+        description: 'Environment that will be inherited by all jobs'
+        type: string
+        required: true
+    secrets:
+      HSM_INTEGRATION_TEST_SSH_KEY:
+        required: true
+
+jobs:
+  run-integration-tests:
+    name: Integration tests
+    runs-on: ubuntu-20.04
+    environment: ${{ inputs.environment }}
+
+    steps:
+#      - name: Checkout rsk-powhsm repo
+#        uses: actions/checkout@v2
+#        with:
+#          path: rsk-powhsm
+#          ref: ${{ inputs.powhsm-ref }}
+#
+#      - name: Build required software
+#        working-directory: rsk-powhsm
+#        run: |
+#          docker/mware/build
+#          docker/packer/build
+#          middleware/build/manager-tcp
+#          ledger/build/build-tcpsigner
+#        shell: bash
+#
+      - name: Checkout hsm-integration-test repo
+        uses: actions/checkout@v2
+        with:
+          repository: rootstock/hsm-integration-test
+          ref: ${{ inputs.hsm-integration-test-ref }}
+          path: hsm-integration-test
+          ssh-key: $HSM_INTEGRATION_TEST_SSH_KEY
+        env:
+          HSM_INTEGRATION_TEST_SSH_KEY: ${{ secrets.HSM_INTEGRATION_TEST_SSH_KEY }}
+#
+#      - name: Copy required files
+#        run: |
+#          mkdir hsm-integration-test/docker/manager/manager-tcp
+#          tar -xzf rsk-powhsm/middleware/bin/manager-tcp.tgz \
+#              -C hsm-integration-test/docker/manager/manager-tcp
+#          cp rsk-powhsm/ledger/src/tcpsigner/tcpsigner \
+#              hsm-integration-test/docker/tcpsigner/
+#        shell: bash
+#
+#      - name: Run HSM integration tests
+#        working-directory: hsm-integration-test
+#        run: sh smoke-test.sh
+#        shell: bash
