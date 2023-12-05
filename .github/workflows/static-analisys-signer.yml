@@ -17,7 +17,7 @@ jobs:
       - name: Run static analysis
         run: |
           mkdir -p static-analysis
-          ./static-analysis-signer > static-analysis/signer.xml
+          ./static-analysis-signer 2> static-analysis/signer.xml
 
       - name: Upload static analysis results
         uses: actions/upload-artifact@v3
