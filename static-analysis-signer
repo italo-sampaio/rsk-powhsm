@@ -10,7 +10,6 @@ if [[ $1 == "exec" ]]; then
     popd > /dev/null
 
     SRC_DIR=$HSM_ROOT/ledger/src/signer
-    echo Running static analysis on $SRC_DIR...
 
     CHECKPOINT=e108960a242ad7bd45c21aff9c7ed9c516789e9cffacdd895502727d8f460d2c
     TARGET_DIFFICULTY=0x6e
