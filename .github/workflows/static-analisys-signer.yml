@@ -1,0 +1,26 @@
+name: Signer static analysis
+
+on: [push]
+
+jobs:
+  run-static-analysis:
+    name: Run static analysis
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout this repo
+        uses: actions/checkout@v3
+
+      - name: Build the ledger docker image
+        run: docker/ledger/build
+
+      - name: Run static analysis
+        run: |
+          mkdir -p static-analysis
+          ./static-analysis-signer > static-analysis/signer.xml
+
+      - name: Upload static analysis results
+        uses: actions/upload-artifact@v3
+        with:
+          name: signer-static-analysis
+          path: static-analysis/signer.xml

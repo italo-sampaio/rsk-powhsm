@@ -16,11 +16,18 @@ if [[ $1 == "exec" ]]; then
     TARGET_DIFFICULTY=0x6e
     NETWORK=regtest
 
-    BUILD_CMD="make CHECKPOINT=$CHECKPOINT TARGET_DIFFICULTY=$TARGET_DIFFICULTY NETWORK=$NETWORK"
+    LINT="cppcheck"
+    LINTFLAGS="-q --enable=all --suppress=missingIncludeSystem --suppress=unusedFunction --xml --xml-version=2"
+    find $SRC_DIR -name "*.[ch]" | \
+    egrep -v "(bigdigits|bigdtypes|keccak256)\.[ch]$" | \
+    egrep -v "ledger/src/ui/src/glyphs.[ch]" | \
+    xargs ${LINT} ${LINTFLAGS}
 
-    cd $SRC_DIR
-    make clean
-    scan-build --use-cc=/usr/bin/clang --exclude /opt --show-description --status-bugs -o $SRC_DIR/static-analysis $BUILD_CMD
+#    BUILD_CMD="make CHECKPOINT=$CHECKPOINT TARGET_DIFFICULTY=$TARGET_DIFFICULTY NETWORK=$NETWORK"
+#
+#    cd $SRC_DIR
+#    make clean
+#    scan-build --use-cc=/usr/bin/clang --exclude /opt --show-description --status-bugs -o $SRC_DIR/static-analysis $BUILD_CMD
 else
     # Script directory
     pushd $(dirname $0) > /dev/null
