@@ -28,4 +28,5 @@ jobs:
       - name: Write to Job Summary
         if: always()
         run: |
-            cat static-analysis/signer.xml > $GITHUB_STEP_SUMMARY
+            python3 static-analysis/cppcheck-to-md.py static-analysis/signer.xml
+            cat static-analysis/signer.md > $GITHUB_STEP_SUMMARY
