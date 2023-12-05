@@ -24,3 +24,22 @@ jobs:
         with:
           name: signer-static-analysis
           path: static-analysis/signer.xml
+
+      - name: Write to Job Summary
+        if: always()
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const xml2js = require('xml2js');
+            const parser = new xml2js.Parser();
+            const xml = fs.readFileSync('static-analysis/signer.xml');
+            parser.parseString(xml, (err, result) => {
+              if (err) {
+                core.setFailed(err.message);
+                return;
+              }
+              const summary = result.cppcheck.results[0].error.length;
+              core.setOutput('summary', summary);
+            });
